@@ -47,7 +47,7 @@ resource "aws_instance" "test-env-instance" {
   provisioner "remote-exec" {
     inline = concat(
       ["sudo touch /etc/profile.d/global_vars.sh"],
-      [for k, v in var.instance_global_vars : "echo \"${k}=${v}\" >> /etc/profile.d/global_vars.sh"]
+      [for k, v in var.instance_global_vars : "echo \"${k}=${v}\" | sudo tee -a /etc/profile.d/global_vars.sh"]
     )
   }
 
@@ -59,8 +59,4 @@ resource "aws_instance" "test-env-instance" {
   provisioner "remote-exec" {
     script = "${local.setup_path}/setup.sh"
   }
-}
-
-output "ssh_to" {
-  value = var.instance_cnt == 1 ? "${var.user}@${aws_instance.test-env-instance[0].public_ip}" : ""
 }
