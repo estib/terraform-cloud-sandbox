@@ -9,3 +9,7 @@ output "instance_info" {
 output "ssh_to" {
   value = var.instance_cnt == 1 ? "${var.user}@${aws_instance.test-env-instance[0].public_ip}" : ""
 }
+
+output "security_group" {
+  value = aws_security_group.test-env
+}
