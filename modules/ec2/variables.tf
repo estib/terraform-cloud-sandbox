@@ -89,3 +89,9 @@ variable "setup_path" {
   description = "overwrite the path that contains your setup.sh and ./data directory"
   default     = ""
 }
+
+variable "extra_ingress_rules" {
+  type        = map(any)
+  description = "add custom ingress rules to your security group for accessing apps on custmo ports"
+  default     = {}
+}
