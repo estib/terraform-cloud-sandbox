@@ -12,6 +12,14 @@ module "my-postgres-1" {
   # vpc_id                   = data.terraform_remote_state.vpc.outputs.default-vpc.id    # "CHANGE_ME"
   # subnet_id                = data.terraform_remote_state.vpc.outputs.default-vpc-subnets.0.id # "CHANGE_ME"
   extra_security_group_ids = ["my-sgid"]
+
+  # if you wanted to access postgres directly from your whitelisted IPs...
+  extra_ingress_rules = {
+    "postgresql": {
+      "port": "5432",
+      "protocol": "tcp"  # optional, defaults to "tcp"
+    }
+  }
 }
 
 provider "aws" {

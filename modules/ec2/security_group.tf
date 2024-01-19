@@ -45,26 +45,18 @@ resource "aws_security_group" "test-env" {
     ]
   }
 
-  ingress {
-    description = "allow 3000 from listed IPs (for grafana)"
-    from_port   = 3000
-    to_port     = 3000
-    protocol    = "tcp"
-    cidr_blocks = [
-      for ip in var.access_ips :
-      ip
-    ]
-  }
+  dynamic "ingress" {
+    for_each = var.extra_ingress_rules
 
-  ingress {
-    description = "allow 8080 from listed IPs"
-    from_port   = 8080
-    to_port     = 8080
-    protocol    = "tcp"
-    cidr_blocks = [
-      for ip in var.access_ips :
-      ip
-    ]
+    content {
+      from_port   = ingress.value.port
+      to_port     = ingress.value.port
+      protocol    = lookup(ingress.value, "protocol", "tcp")
+      cidr_blocks = [
+        for ip in var.access_ips :
+        ip
+      ]
+    }
   }
 
   egress {
