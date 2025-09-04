@@ -1,15 +1,21 @@
 
-
 # required vars
 
-variable "aws_region" {
-  description = "your aws region"
+variable "gcp_project" {
+  description = "your gcp project"
   type        = string
 }
 
-variable "credentials_file" {
-  description = "the file that contains the details terraform will use to authenticate with aws"
-  default     = "~/.aws/credentials"
+variable "gcp_region" {
+  description = "your gcp region"
+  type        = string
+  default     = "us-central1"
+}
+
+variable "gcp_zone" {
+  description = "your gcp zone"
+  type        = string
+  default     = "us-central1-c"
 }
 
 variable "test_env_name" {
@@ -17,29 +23,9 @@ variable "test_env_name" {
   type        = string
 }
 
-variable "profile" {
-  description = "the aws credentials profile to use"
-  type        = string
-}
-
 variable "creator" {
   description = "who is creating all this"
   type        = string
-}
-
-variable "vpc_id" {
-  type        = string
-  description = "what vpc you wish to use"
-}
-
-variable "subnet_id" {
-  type        = string
-  description = "subnet for the vpc you're using"
-}
-
-variable "cidr_blocks" {
-  description = "your vpc's cidr block"
-  default     = ["10.0.0.0/16"]
 }
 
 variable "access_ips" {
@@ -53,13 +39,13 @@ variable "user" {
 }
 
 variable "instance_type" {
-  description = "what kind of instance you want. recommended t2.micro to t2.medium"
-  default     = "t2.micro"
+  description = "what kind of instance you want. recommended e2-micro to e2-medium"
+  default     = "e2-micro"
 }
 
-variable "ami" {
-  description = "what ami to provision"
-  default     = "ami-0892d3c7ee96c0bf7"
+variable "instance_image" {
+  description = "what kind of boot image you want for your instnace. defaults to an ubuntu 24.04"
+  default     = "ubuntu-2404-noble-amd64-v20250828"
 }
 
 variable "instance_home" {
@@ -94,4 +80,10 @@ variable "extra_ingress_rules" {
   type        = map(any)
   description = "add custom ingress rules to your security group for accessing apps on custom ports"
   default     = {}
+}
+
+variable "network_name" {
+  description = "name of your vpc network"
+  type        = string
+  default     = null # will be computed as "${test_env_name}-network" if not provided
 }
