@@ -77,7 +77,7 @@ resource "google_compute_instance" "default" {
   provisioner "remote-exec" {
     inline = concat(
       ["sudo touch /etc/profile.d/global_vars.sh"],
-      [for k, v in var.instance_global_vars : "echo \"${k}=${v}\" | sudo tee -a /etc/profile.d/global_vars.sh"]
+      [for k, v in var.instance_global_vars : "printf '%s=\"%s\"\\n' '${k}' '${replace(v, "\n", "\\n")}' | sudo tee -a /etc/profile.d/global_vars.sh"]
     )
   }
 
